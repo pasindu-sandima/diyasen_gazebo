@@ -1,0 +1,109 @@
+<?xml version="1.0" ?>
+<robot name="diyasen" xmlns:xacro="http://ros.org/wiki/xacro">
+
+
+
+    <xacro:property name="M_PI" value="3.14159"/> 
+    <xacro:property name="wheel_length" value="0.032" />
+    <xacro:property name="wheel_radius" value="0.062" />
+    <xacro:property name="castor_wheel_length" value="0.02333" />
+    <xacro:property name="castor_wheel_radius" value="0.024165" />
+    <xacro:property name="castor_base_length" value="0.015" />
+    <xacro:property name="castor_base_length_2" value="0.015" />
+    <xacro:property name="castor_base_radius" value="0.015" />
+
+
+    <xacro:include filename="$(find ds_description)/urdf/wheel.urdf" />
+    <xacro:include filename="$(find ds_description)/urdf/castor.urdf" />
+
+    <link name= "baselink">
+        <inertial>
+            <mass value="4.0"/>
+            <origin xyz="0.0 0 0.1" rpy=" 0 0 0"/>
+            <inertia
+                ixx="0.1" ixy="0" ixz="0"
+                iyy="0.1" iyz="0"
+                izz="0.1"
+            />
+        </inertial>
+        <visual>
+            <origin xyz="-0.21762 0 0.0025" rpy="0 0 0" />
+            <geometry>
+                <box size="0.43524 0.45936 0.005"/>
+            </geometry>
+
+        </visual>
+        <collision>
+            <origin xyz="-0.21762 0 0.0025" rpy="0 0 0" />
+            <geometry>
+                <box size="0.43524 0.45936 0.005"/>
+            </geometry>
+        </collision>
+    </link>
+
+
+
+
+
+    <xacro:ds_wheel wheel_prefix="left">
+        <origin xyz="-0.19750 0.25138 -0.0607" rpy="0 0 0" />
+    </xacro:ds_wheel>
+    <xacro:ds_wheel wheel_prefix="right">
+        <origin xyz="-0.19750 -0.25138 -0.0607" rpy="0 0 0" />
+    </xacro:ds_wheel>
+
+
+
+    <xacro:ds_castor castor_prefix="front_left">
+        <origin xyz="-0.0375 0.19333 -0.05615" rpy="0 0 0" />
+    </xacro:ds_castor>
+    <xacro:ds_castor castor_prefix="front_right">
+        <origin xyz="-0.0375 -0.19333 -0.05615" rpy="0 0 0" />
+    </xacro:ds_castor>
+
+    <xacro:ds_castor castor_prefix="rear_left">
+        <origin xyz="-0.41024 0.0675 -0.05615" rpy="0 0 0" />
+    </xacro:ds_castor>
+    <xacro:ds_castor castor_prefix="rear_right">
+        <origin xyz="-0.41024 -0.0675 -0.05615" rpy="0 0 0" />
+    </xacro:ds_castor>
+
+
+
+    <gazebo>
+        <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+        <legacyMode>false</legacyMode>
+        <alwaysOn>true</alwaysOn>
+        <updateRate>10</updateRate>
+        <leftJoint>left_wheel</leftJoint>
+        <rightJoint>right_wheel</rightJoint>
+        <wheelSeparation>0.478</wheelSeparation>
+        <wheelDiameter>0.124</wheelDiameter>
+        <torque>10</torque>
+        <commandTopic>cmd_vel</commandTopic>
+        <odometryTopic>odom</odometryTopic>
+        <odometryFrame>odom</odometryFrame>
+        <robotBaseFrame>baselink</robotBaseFrame>
+        </plugin>
+    </gazebo>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+</robot>

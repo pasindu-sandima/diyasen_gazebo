@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+
+
+<robot name="ds_castor" xmlns:xacro="http://ros.org/wiki/xacro" >
+
+<xacro:macro name="ds_castor" params="castor_prefix *joint_pose">
+		<link name="${castor_prefix}_castor_link">
+			<inertial>
+				<mass value="2.637" />
+				<origin xyz="0 0 0" />
+				<inertia  ixx="0.02467" ixy="0" ixz="0" iyy="0.04411" iyz="0" izz="0.02467" />
+			</inertial>
+			<visual>
+                <origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
+				<!-- <geometry>
+					<cylinder length="${castor_wheel_length}" radius="${castor_wheel_radius}" />
+				</geometry> -->
+
+				<geometry>
+					<mesh filename="$(find ds_description)/urdf/meshes/caswheel.dae" />
+				</geometry>
+			</visual>
+			<collision>
+				<origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
+				<geometry>
+					<cylinder length="${castor_wheel_length}" radius="${castor_wheel_radius}" />
+				</geometry>
+			</collision>
+		</link>
+
+
+        <link name="${castor_prefix}_castor_base">
+			<inertial>
+				<mass value="2.637" />
+				<origin xyz="0 0 0" />
+				<inertia  ixx="0.02467" ixy="0" ixz="0" iyy="0.04411" iyz="0" izz="0.02467" />
+			</inertial>
+			<visual>
+				<origin xyz="0 0 0" rpy="0 0 0" />
+				<geometry>
+					<mesh filename="$(find ds_description)/urdf/meshes/castor_base2.dae" />
+				</geometry>
+                <!-- <origin xyz="0 0 ${castor_base_length_2}" rpy="0 0 0" />
+				<geometry>
+					<cylinder length="${castor_base_length}" radius="${castor_base_radius}" />
+				</geometry> -->
+			</visual>
+			<collision>
+				<origin xyz="0 0 ${castor_base_length_2}" rpy="0 0 0" />
+				<geometry>
+					<cylinder length="${castor_base_length}" radius="${castor_base_radius}" />
+				</geometry>
+			</collision>
+		</link>
+
+
+        <joint name="${castor_prefix}_castor" type="continuous">
+			<parent link="${castor_prefix}_castor_base"/>
+			<child link="${castor_prefix}_castor_link"/>
+			<origin xyz="-0.02626 0 -0.042385" rpy="0 0 0" />
+			<axis xyz="0 1 0" rpy="0 0 0" />
+		</joint>
+
+		<gazebo reference="${castor_prefix}_castor_link">
+			<mu1 value="1.0"/>
+			<mu2 value="1.0"/>
+			<kp value="10000000.0" />
+			<kd value="1.0" />
+			<fdir1 value="1 0 0"/>
+		</gazebo>
+
+
+        <gazebo reference="${castor_prefix}_castor_base">
+			<mu1 value="1.0"/>
+			<mu2 value="1.0"/>
+			<kp value="10000000.0" />
+			<kd value="1.0" />
+			<fdir1 value="1 0 0"/>
+		</gazebo>
+
+		<joint name="${castor_prefix}_wheel" type="continuous">
+			<parent link="baselink"/>
+			<child link="${castor_prefix}_castor_base"/>
+			<xacro:insert_block name="joint_pose"/>
+			<axis xyz="0 0 1" rpy="0 0 0" />
+		</joint>
+
+
+
+
+	</xacro:macro>
+
+
+
+
+</robot>
